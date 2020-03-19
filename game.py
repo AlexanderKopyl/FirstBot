@@ -17,12 +17,11 @@ def game(message):
     db_worker = SQLighter(config.database_name)
     # Получаем случайную строку из БД
     row = db_worker.select_single(random.randint(1, utils.get_rows_count()))
-    # print(row)
+    print(utils.get_rows_count())
     # Формируем разметку
     markup = utils.generate_markup(row[0], row[1])
     # Отправляем аудиофайл с вариантами ответа
-    bot.send_message(message.chat.id, row, reply_markup=markup)
-    # bot.send_voice(message.chat.id, row[1], reply_markup=markup)
+    bot.send_message(message.chat.id, row[1], reply_markup=markup)
     # Включаем "игровой режим"
     utils.set_user_game(message.chat.id, row[1])
     # Отсоединяемся от БД
@@ -51,5 +50,4 @@ def check_answer(message):
 
 if __name__ == '__main__':
     utils.count_rows()
-    random.seed()
     bot.infinity_polling()
